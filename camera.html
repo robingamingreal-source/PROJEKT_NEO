@@ -7,6 +7,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <div id="preloader">
+  <div class="loader-wrapper">
+    <span class="loader-letter">L</span>
+    <span class="loader-letter">o</span>
+    <span class="loader-letter">a</span>
+    <span class="loader-letter">d</span>
+    <span class="loader-letter">i</span>
+    <span class="loader-letter">n</span>
+    <span class="loader-letter">g</span>
+
+    <div class="loader-bg-1"></div>
+    <div class="loader-bg-2"></div>
+
+    <div class="loader"></div>
+  </div>
+</div>
     <h1>X-Cam</h1>
     <video id="cameraStream" autoplay playsinline muted width="400" height="300"></video>
     <h2>Photos</h2>
@@ -126,6 +142,16 @@
             clearVideoBtn.disabled = true;
         });
     </script>
-
+<script>
+  // Wartet, bis die gesamte Seite komplett geladen ist
+  window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    
+    // Wartet extra 2 Sekunden (2000 Millisekunden), bevor der Loader ausgeblendet wird
+    setTimeout(function() {
+      preloader.classList.add('fade-out');
+    }, 2000); 
+  });
+</script>
 </body>
 </html>

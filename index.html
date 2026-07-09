@@ -7,11 +7,39 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="preloader">
+  <div class="loader-wrapper">
+    <span class="loader-letter">L</span>
+    <span class="loader-letter">o</span>
+    <span class="loader-letter">a</span>
+    <span class="loader-letter">d</span>
+    <span class="loader-letter">i</span>
+    <span class="loader-letter">n</span>
+    <span class="loader-letter">g</span>
+
+    <div class="loader-bg-1"></div>
+    <div class="loader-bg-2"></div>
+
+    <div class="loader"></div>
+  </div>
+</div>
     <h1>Projekt_NEO</h1>
     <hr>
     <h2>Programms</h2>
     <a href="x-write.html"><h4>X-Write</h4></a>
     <a href="camera.html"><h4>X-Cam</h4></a>
     <a href="mediaplayer.html"><h4>X-Player</a>
+    <a href="audio.html"><h4>X-Audio</h4></a>
+<script>
+  // Wartet, bis die gesamte Seite komplett geladen ist
+  window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    
+    // Wartet extra 2 Sekunden (2000 Millisekunden), bevor der Loader ausgeblendet wird
+    setTimeout(function() {
+      preloader.classList.add('fade-out');
+    }, 2000); 
+  });
+</script>
 </body>
 </html>

@@ -23,5 +23,16 @@
     <button onclick="window.location.href='about.html'">About</button>
     <hr>
     <button onclick="window.location.href='index.html'">Back to Main Menu</button>
+<script>
+  // Wartet, bis die gesamte Seite komplett geladen ist
+  window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    
+    // Wartet extra 2 Sekunden (2000 Millisekunden), bevor der Loader ausgeblendet wird
+    setTimeout(function() {
+      preloader.classList.add('fade-out');
+    }, 2000); 
+  });
+</script>
 </body>
 </html>

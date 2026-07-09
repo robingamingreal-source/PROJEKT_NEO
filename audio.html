@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>X-Audio (WAV)</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div id="preloader">
+  <div class="loader-wrapper">
+    <span class="loader-letter">L</span>
+    <span class="loader-letter">o</span>
+    <span class="loader-letter">a</span>
+    <span class="loader-letter">d</span>
+    <span class="loader-letter">i</span>
+    <span class="loader-letter">n</span>
+    <span class="loader-letter">g</span>
+
+    <div class="loader-bg-1"></div>
+    <div class="loader-bg-2"></div>
+
+    <div class="loader"></div>
+  </div>
+</div>
+    <h1>X-Audio</h1>
+    
+    <h2>Audio Recording (WAV)</h2>
+    <button id="startAudioBtn">Start Recording</button>
+    <button id="stopAudioBtn" disabled>Stop Recording</button>
+    <button id="clearAudioBtn" disabled>Clear Audio</button>
+    <button onclick="window.location.href='index.html'">Back Home</button>
+    <br><br>
+    
+    <audio id="audioPlayback" controls style="display:none;"></audio>
+    <br><br>
+    <a id="downloadAudioBtn" style="display:none;">Download Audio</a>
+
+    <script>
+        const startAudioBtn = document.getElementById('startAudioBtn');
+        const stopAudioBtn = document.getElementById('stopAudioBtn');
+        const clearAudioBtn = document.getElementById('clearAudioBtn');
+        const audioPlayback = document.getElementById('audioPlayback');
+        const downloadAudioBtn = document.getElementById('downloadAudioBtn');
+
+        let audioContext;
+        let audioInput;
+        let scriptProcessor;
+        let audioStream;
+        
+        let audioChunks = [];
+        let recordingLength = 0;
+        let isRecording = false;
+
+        // Mikrofonzugriff anfordern
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                audioStream = stream;
+                // Buttons aktivieren, sobald Mikrofon bereit ist
+                startAudioBtn.disabled = false;
+            })
+            .catch(err => {
+                console.error("Error accessing microphone: ", err);
+                alert("Zugriff verweigert oder kein Mikrofon vorhanden.");
+            });
+
+        startAudioBtn.addEventListener('click', () => {
+            audioChunks = [];
+            recordingLength = 0;
+            isRecording = true;
+
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            audioInput = audioContext.createMediaStreamSource(audioStream);
+            
+            scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+
+            scriptProcessor.onaudioprocess = (e) => {
+                if (!isRecording) return;
+                const inputBuffer = e.inputBuffer.getChannelData(0);
+                // Kopie der Audiodaten sichern
+                audioChunks.push(new Float32Array(inputBuffer));
+                recordingLength += inputBuffer.length;
+            };
+
+            // Verbindungen herstellen
+            audioInput.connect(scriptProcessor);
+            scriptProcessor.connect(audioContext.destination);
+
+            startAudioBtn.disabled = true;
+            stopAudioBtn.disabled = false;
+            clearAudioBtn.disabled = true;
+        });
+
+        stopAudioBtn.addEventListener('click', () => {
+            isRecording = false;
+
+            audioInput.disconnect();
+            scriptProcessor.disconnect();
+            audioContext.close();
+
+            const finalBuffer = flattenChunks(audioChunks, recordingLength);
+            
+            const wavBlob = encodeWAV(finalBuffer, audioContext.sampleRate);
+            const audioURL = URL.createObjectURL(wavBlob);
+
+            audioPlayback.src = audioURL;
+            audioPlayback.style.display = 'block';
+
+            downloadAudioBtn.href = audioURL;
+            downloadAudioBtn.download = 'audio_recording.wav';
+            downloadAudioBtn.style.display = 'inline';
+            downloadAudioBtn.innerText = 'Download Audio (.wav)';
+            
+            startAudioBtn.disabled = false;
+            stopAudioBtn.disabled = true;
+            clearAudioBtn.disabled = false;
+        });
+
+        clearAudioBtn.addEventListener('click', () => {
+            audioPlayback.src = '';
+            audioPlayback.removeAttribute('src');
+            audioPlayback.load();
+            audioPlayback.style.display = 'none';
+            downloadAudioBtn.style.display = 'none';
+            clearAudioBtn.disabled = true;
+        });
+
+        function flattenChunks(chunks, length) {
+            const result = new Float32Array(length);
+            let offset = 0;
+            for (let i = 0; i < chunks.length; i++) {
+                result.set(chunks[i], offset);
+                offset += chunks[i].length;
+            }
+            return result;
+        }
+
+        function encodeWAV(samples, sampleRate) {
+            const buffer = new ArrayBuffer(44 + samples.length * 2);
+            const view = new DataView(buffer);
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + samples.length * 2, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeString(view, 36, 'data');
+            view.setUint32(40, samples.length * 2, true);
+
+            let offset = 44;
+            for (let i = 0; i < samples.length; i++, offset += 2) {
+                let s = Math.max(-1, Math.min(1, samples[i]));
+                view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+    </script>
+</body>
+<script>
+  // Wartet, bis die gesamte Seite komplett geladen ist
+  window.addEventListener('load', function() {
+    const preloader = document.getElementById('preloader');
+    
+    // Wartet extra 2 Sekunden (2000 Millisekunden), bevor der Loader ausgeblendet wird
+    setTimeout(function() {
+      preloader.classList.add('fade-out');
+    }, 2000); 
+  });
+</script>
+</html>
