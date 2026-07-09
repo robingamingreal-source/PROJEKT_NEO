@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Write</title>
+    <link rel="stylesheet" href="xstyle.css">
+</head>
+<body>
+    <h1>Write in X-Write</h1>
+    <p><b>Start writing your text below:</b></p>
+    <textarea id="textArea" rows="20" cols="80" placeholder="Type your text here..."></textarea>
+    <br>
+    <button onclick="saveText()">Save Text</button>
+    <button onclick="document.getElementById('textArea').value = ''">Clear Text</button>
+    <button onclick="loadText()">Load Text</button>
+    <input type="range" id="fontSizeSlider" min="10" max="36" value="16" oninput="updateFontSize()"></input>
+    <br>
+    <script>
+        function updateFontSize() {
+            const fontSize = document.getElementById('fontSizeSlider').value;
+            document.getElementById('textArea').style.fontSize = fontSize + 'px';
+        }
+    </script>
+    <br>
+    <script>
+        const textarea = document.getElementById('textArea');
+    
+        function saveText() {
+            const text = document.getElementById('textArea').value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my_text.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function loadText() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'text/plain';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('textArea').value = e.target.result;
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        textarea.addEventListener('input', () => {
+            const text = textarea.value;
+            localStorage.setItem('savedText', text);
+        });
+        document.addEventListener('keydown', event => {
+            if ((event.ctrlKey || event.metaKey) && !event.shiftKey) {
+                const key = event.key.toLowerCase();
+                if (key === 's') {
+                    event.preventDefault();
+                    saveText();
+                } else if (key === 'l') {
+                    event.preventDefault();
+                    loadText();
+                } else if (key === 'k') {
+                    event.preventDefault();
+                    clearText();
+                }
+            }
+        });
+    </script>
+<hr>
+<button onclick="window.location.href='x-write.html'">Back to Home</button>
+</body>
+</html>
