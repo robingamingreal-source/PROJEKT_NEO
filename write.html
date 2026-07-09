@@ -4,9 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>X-Write</title>
-    <link rel="stylesheet" href="xstyle.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+      <div id="preloader">
+  <div class="loader-wrapper">
+    <span class="loader-letter">L</span>
+    <span class="loader-letter">o</span>
+    <span class="loader-letter">a</span>
+    <span class="loader-letter">d</span>
+    <span class="loader-letter">i</span>
+    <span class="loader-letter">n</span>
+    <span class="loader-letter">g</span>
+
+    <div class="loader-bg-1"></div>
+    <div class="loader-bg-2"></div>
+
+    <div class="loader"></div>
+  </div>
+</div>
     <h1>Write in X-Write</h1>
     <p><b>Start writing your text below:</b></p>
     <textarea id="textArea" rows="20" cols="80" placeholder="Type your text here..."></textarea>
@@ -74,7 +90,7 @@
         });
     </script>
 <hr>
-<button onclick="window.location.href='x-write.html'">Back to Home</button>
+<button onclick="window.location.href='index.html'">Back to Home</button>
 <script>
   // Wartet, bis die gesamte Seite komplett geladen ist
   window.addEventListener('load', function() {

@@ -228,3 +228,12 @@ button:active {
 a{
     color: #0c8618;
 }
+#textArea{
+    border: solid 10px #0c8618;
+    background-color: #0c4f027e;
+    border-radius: 10px;
+    transition: transform 400ms ease;
+}
+#textArea:focus{
+    transform: scale(1.1);
+}
