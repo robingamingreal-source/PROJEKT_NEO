@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>X-Player</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>X-Player</h1>
+    <input type="file" id="fileInput" accept="video/*, audio/*">
+    <button id="clearBtn" disabled>Clear Media</button>
+    <button onclick="window.location.href='index.html'">Back Home</button>
+    <br><br>
+    <video id="mediaPlayer" controls width="0" height="0"></video>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const clearBtn = document.getElementById('clearBtn');
+        const mediaPlayer = document.getElementById('mediaPlayer');
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                
+                mediaPlayer.src = fileURL;
+                mediaPlayer.width = 400;
+                mediaPlayer.height = 300;
+                
+                clearBtn.disabled = false;
+            }
+        });
+        clearBtn.addEventListener('click', () => {
+            fileInput.value = '';
+            mediaPlayer.src = '';
+            mediaPlayer.removeAttribute('src');
+            mediaPlayer.load();
+            mediaPlayer.width = 0;
+            mediaPlayer.height = 0;
+            clearBtn.disabled = true;
+        });
+    </script>
+
+</body>
+</html>

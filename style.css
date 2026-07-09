@@ -3,4 +3,58 @@ body{
     align-content: center;
     text-align: center;
     margin: 2px;
+    background-image: url('bg.png');
+    background-size: cover;
+    background-attachment: fixed;
+    color: #19a2cc;
+}
+button {
+    background-color: #0f4fff;
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid #0f4fff;
+    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    margin: 5px;
+}
+button:hover {
+    background-color: #0c3ccc;
+    border-color: #0c3ccc;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+}
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: scale(1);
+}
+img{
+    border-radius: 10px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.259);
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+img:hover{
+    border-radius: 10px;
+    box-shadow: 0 8px 10px rgba(15, 108, 46, 0.9);
+    transform: scale(1.1);
+}
+video{
+    border-radius: 10px;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.259);
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+video:hover{
+    border-radius: 10px;
+    box-shadow: 0 8px 10px rgba(15, 108, 46, 0.9);
+    transform: scale(1.1);
+}
+hr {
+    border: none;
+    height: 10px;
+    background-color: rgba(4, 101, 136, 0.34);
+    margin: 20px auto;
+    border-radius: 10px;
+    width: 70%;
 }

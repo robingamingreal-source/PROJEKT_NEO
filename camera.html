@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>X-Cam</title>
+    <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>X-Cam</h1>
+    <video id="cameraStream" autoplay playsinline muted width="400" height="300"></video>
+    <h2>Photos</h2>
+    <button id="snapBtn">Take Photo</button>
+    <button id="clearPhotoBtn" disabled>Clear Photo</button>
+    <br><br>
+    <canvas id="canvas" width="400" height="300" style="display:none;"></canvas>
+    <img id="photo" alt="" width="0" height="0">
+    <br>
+    <a id="downloadPhotoBtn" style="display:none;">Download Photo</a>
+    <hr>
+    <h2>Videos</h2>
+    <button id="startVideoBtn">Start Recording</button>
+    <button id="stopVideoBtn" disabled>Stop Recording</button>
+    <button id="clearVideoBtn" disabled>Clear Video</button>
+    <button onclick="window.location.href='index.html'">Back Home</button>
+    <br><br>
+    <video id="recordingPlayback" controls width="0" height="0"></video>
+    <br>
+    <a id="downloadVideoBtn" style="display:none;">Download Video</a>
+    <script>
+        const videoStream = document.getElementById('cameraStream');
+        
+        const canvas = document.getElementById('canvas');
+        const photo = document.getElementById('photo');
+        const snapBtn = document.getElementById('snapBtn');
+        const clearPhotoBtn = document.getElementById('clearPhotoBtn');
+        const downloadPhotoBtn = document.getElementById('downloadPhotoBtn');
+        const context = canvas.getContext('2d');
+
+        const startVideoBtn = document.getElementById('startVideoBtn');
+        const stopVideoBtn = document.getElementById('stopVideoBtn');
+        const clearVideoBtn = document.getElementById('clearVideoBtn');
+        const recordingPlayback = document.getElementById('recordingPlayback');
+        const downloadVideoBtn = document.getElementById('downloadVideoBtn');
+
+        let mediaRecorder;
+        let recordedChunks = [];
+
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then(stream => {
+                videoStream.srcObject = stream;
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) {
+                        recordedChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                    recordedChunks = [];
+                    
+                    const videoURL = URL.createObjectURL(blob);
+                    
+                    recordingPlayback.src = videoURL;
+                    recordingPlayback.width = 400;
+                    recordingPlayback.height = 300;
+
+                    downloadVideoBtn.href = videoURL;
+                    downloadVideoBtn.download = 'recording.webm';
+                    downloadVideoBtn.style.display = 'inline';
+                    downloadVideoBtn.innerText = 'Download Video (.webm)';
+                    clearVideoBtn.disabled = false;
+                };
+            })
+            .catch(err => {
+                console.error("Error accessing camera/microphone: ", err);
+                alert("Access denied or devices not available. A microphone is required for video recording.");
+            });
+
+        snapBtn.addEventListener('click', () => {
+            context.drawImage(videoStream, 0, 0, canvas.width, canvas.height);
+            const dataURL = canvas.toDataURL('image/png');
+            
+            photo.src = dataURL;
+            photo.width = 400;
+            photo.height = 300;
+            
+            downloadPhotoBtn.href = dataURL;
+            downloadPhotoBtn.download = 'photo.png';
+            downloadPhotoBtn.style.display = 'inline';
+            downloadPhotoBtn.innerText = 'Download Photo (.png)';
+            clearPhotoBtn.disabled = false;
+        });
+
+        clearPhotoBtn.addEventListener('click', () => {
+            photo.src = '';
+            photo.width = 0;
+            photo.height = 0;
+            downloadPhotoBtn.style.display = 'none';
+            clearPhotoBtn.disabled = true;
+        });
+
+        startVideoBtn.addEventListener('click', () => {
+            recordedChunks = [];
+            mediaRecorder.start();
+            startVideoBtn.disabled = true;
+            stopVideoBtn.disabled = false;
+            clearVideoBtn.disabled = true;
+        });
+
+        stopVideoBtn.addEventListener('click', () => {
+            mediaRecorder.stop();
+            startVideoBtn.disabled = false;
+            stopVideoBtn.disabled = true;
+        });
+
+        clearVideoBtn.addEventListener('click', () => {
+            recordingPlayback.src = '';
+            recordingPlayback.removeAttribute('src');
+            recordingPlayback.load();
+            recordingPlayback.width = 0;
+            recordingPlayback.height = 0;
+            downloadVideoBtn.style.display = 'none';
+            clearVideoBtn.disabled = true;
+        });
+    </script>
+
+</body>
+</html>
