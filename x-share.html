@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>X-Share</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <h1>X-Share</h1>
+    <br>
+    <h2>Simple FileShare</h2>
+    <br>
+    <input type="file" id="fileInput">
+    <br><br>
+    <button id="uploadBtn" disabled>Generate Share Link</button>
+    <button id="clearFileBtn" disabled>Clear</button>
+
+    <br><br>
+
+    <div id="shareSection" style="display: none;">
+        <p>Scan to download:</p>
+        <img id="qrCode" src="" alt="QR Code" width="200" height="200">
+        <br><br>
+        <a id="shareLink" href="#" target="_blank"></a>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const clearFileBtn = document.getElementById('clearFileBtn');
+        const shareSection = document.getElementById('shareSection');
+        const qrCode = document.getElementById('qrCode');
+        const shareLink = document.getElementById('shareLink');
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                uploadBtn.disabled = false;
+                clearFileBtn.disabled = false;
+            }
+        });
+
+        uploadBtn.addEventListener('click', async () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            uploadBtn.innerText = "Uploading...";
+            uploadBtn.disabled = true;
+
+            const randomRouteId = Math.random().toString(36).substring(2, 10);
+            const arrayBuffer = await file.arrayBuffer();
+
+            fetch('/upload', {
+                method: 'POST',
+                headers: {
+                    'X-File-Name': encodeURIComponent(file.name),
+                    'X-Route-Id': randomRouteId,
+                    'Content-Type': 'application/octet-stream'
+                },
+                body: arrayBuffer
+            })
+            .then(response => response.json())
+            .then(data => {
+                const downloadUrl = window.location.origin + data.url;
+                qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(downloadUrl)}`;
+                shareLink.href = downloadUrl;
+                shareLink.innerText = downloadUrl;
+                shareSection.style.display = "block";
+                uploadBtn.innerText = "Generate Share Link";
+            })
+            .catch(err => {
+                uploadBtn.innerText = "Generate Share Link";
+                uploadBtn.disabled = false;
+            });
+        });
+
+        clearFileBtn.addEventListener('click', () => {
+            fileInput.value = '';
+            shareSection.style.display = "none";
+            qrCode.src = '';
+            shareLink.href = '#';
+            shareLink.innerText = '';
+            uploadBtn.disabled = true;
+            clearFileBtn.disabled = true;
+        });
+    </script>
+
+</body>
+</html>
