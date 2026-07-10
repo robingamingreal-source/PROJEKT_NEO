@@ -30,7 +30,7 @@
     <button onclick="saveText()">Save Text</button>
     <button onclick="document.getElementById('textArea').value = ''">Clear Text</button>
     <button onclick="loadText()">Load Text</button>
-    <input type="range" id="fontSizeSlider" min="10" max="36" value="16" oninput="updateFontSize()"></input>
+    <input type="range" id="fontSizeSlider" class="range" min="10" max="20" value="10" oninput="updateFontSize()"></input>
     <br>
     <script>
         function updateFontSize() {
@@ -92,11 +92,8 @@
 <hr>
 <button onclick="window.location.href='index.html'">Back to Home</button>
 <script>
-  // Wartet, bis die gesamte Seite komplett geladen ist
   window.addEventListener('load', function() {
     const preloader = document.getElementById('preloader');
-    
-    // Wartet extra 2 Sekunden (2000 Millisekunden), bevor der Loader ausgeblendet wird
     setTimeout(function() {
       preloader.classList.add('fade-out');
     }, 2000); 

@@ -52,11 +52,9 @@
         let recordingLength = 0;
         let isRecording = false;
 
-        // Mikrofonzugriff anfordern
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
                 audioStream = stream;
-                // Buttons aktivieren, sobald Mikrofon bereit ist
                 startAudioBtn.disabled = false;
             })
             .catch(err => {
@@ -77,12 +75,10 @@
             scriptProcessor.onaudioprocess = (e) => {
                 if (!isRecording) return;
                 const inputBuffer = e.inputBuffer.getChannelData(0);
-                // Kopie der Audiodaten sichern
                 audioChunks.push(new Float32Array(inputBuffer));
                 recordingLength += inputBuffer.length;
             };
 
-            // Verbindungen herstellen
             audioInput.connect(scriptProcessor);
             scriptProcessor.connect(audioContext.destination);
 

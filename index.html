@@ -32,11 +32,8 @@
     <a href="audio.html"><h4>X-Audio</h4></a>
     <hr>
 <script>
-  // Wartet, bis die gesamte Seite komplett geladen ist
   window.addEventListener('load', function() {
     const preloader = document.getElementById('preloader');
-    
-    // Wartet extra 2 Sekunden (2000 Millisekunden), bevor der Loader ausgeblendet wird
     setTimeout(function() {
       preloader.classList.add('fade-out');
     }, 2000); 
