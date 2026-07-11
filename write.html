@@ -30,9 +30,10 @@
     <button onclick="saveText()">Save Text</button>
     <button onclick="document.getElementById('textArea').value = ''">Clear Text</button>
     <button onclick="loadText()">Load Text</button>
-    <input type="range" id="fontSizeSlider" class="range" min="1" max="10" value="3" oninput="updateFontSize()"></input>
+    <input type="range" id="fontSizeSlider" class="range" min="6" max="20" value="10" oninput="updateFontSize()"></input>
     <br>
     <script>
+        document.getElementById('textArea').style.fontSize = '10px';
         function updateFontSize() {
             const fontSize = document.getElementById('fontSizeSlider').value;
             document.getElementById('textArea').style.fontSize = fontSize + 'px';
