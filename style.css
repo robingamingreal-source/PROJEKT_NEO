@@ -234,9 +234,6 @@ a{
     border-radius: 10px;
     transition: transform 400ms ease;
 }
-#textArea:focus{
-    transform: scale(1.1);
-}
 
 h1{
   background-color: #166f00b9;
