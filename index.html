@@ -1,43 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJEKT_NEO</title>
     <link rel="stylesheet" href="style.css">
+    <title>PROJEKT_NEO</title>
 </head>
 <body>
-    <div id="preloader">
-  <div class="loader-wrapper">
-    <span class="loader-letter">L</span>
-    <span class="loader-letter">o</span>
-    <span class="loader-letter">a</span>
-    <span class="loader-letter">d</span>
-    <span class="loader-letter">i</span>
-    <span class="loader-letter">n</span>
-    <span class="loader-letter">g</span>
-
-    <div class="loader-bg-1"></div>
-    <div class="loader-bg-2"></div>
-
-    <div class="loader"></div>
-  </div>
-</div>
-    <h1>Projekt_NEO</h1>
-    <hr>
-    <h2>Programms</h2>
-    <a href="write.html"><h4>X-Write</h4></a>
-    <a href="camera.html"><h4>X-Cam</h4></a>
-    <a href="mediaplayer.html"><h4>X-Player</a>
-    <a href="audio.html"><h4>X-Audio</h4></a>
-    <hr>
-<script>
-  window.addEventListener('load', function() {
-    const preloader = document.getElementById('preloader');
-    setTimeout(function() {
-      preloader.classList.add('fade-out');
-    }, 2000); 
-  });
-</script>
+    <div class="bg-container">
+        <div class="stars" id="stars-container"></div>
+    </div>
+    <div class="content-container">
+        <h1>PROJEKT_NEO</h1>
+        <h2>Welcome User</h2>
+        <hr>
+        <div id="status-widget" class="status-card normal">
+        <div class="status-icon">🛡️</div>
+        <div class="status-info">
+        <span class="status-title">Homelab Status</span>
+        <span id="status-text" class="status-desc">Systeme werden geprüft...</span>
+        </div>
+        </div>
+        <audio id="alarm-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRl9vT19WQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU..." type="audio/wav">
+        </audio>
+        <div class="grid-container">
+          <!-- Netdata Kachel -->
+          <button class="ds-button" onclick="openNetdataWindow()">
+              <div class="icon">📈</div>
+              <span>Netdata</span>
+          </button>
+          <button class="ds-button" onclick="openNextcloudWindow()">
+          <div class="icon" >💾</div>
+          <span>Nextcloud</span>
+          </button>
+          <button class="ds-button" onclick="fetch('/restart').then(() => window.close())">
+          <div class="icon">🔄</div>
+          <span>Update</span>
+          </button>
+        </div>
+      </div>
+    <script src="background.js"></script>
+    <script src="script.js"></script>
+    <script src="uptime.js"></script>
 </body>
 </html>
