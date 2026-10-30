@@ -206,11 +206,11 @@ li {
 }
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Erzwingt exakt 2 Spalten */
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   max-width: 350px;
-  margin: 0 auto;
-  justify-items: center;
+  margin: 10px 17.5%;
+  justify-items: start;
 }
 
 
@@ -286,76 +286,6 @@ li {
 @keyframes pulseAlert {
     from { box-shadow: 0 0 10px rgba(255, 0, 0, 0.4); }
     to { box-shadow: 0 0 30px rgba(255, 0, 0, 0.9); }
-}
-
-.window-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(148, 0, 0, 0.627);
-    backdrop-filter: blur(4px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-.window-box {
-    width: 85vw;
-    height: 82vh;
-    background-color: #121212;
-    border: 3px solid #ff0000;
-    border-radius: 12px;
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    animation: windowPop 0.15s ease-out;
-}
-
-@keyframes windowPop {
-    from { transform: scale(0.96); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.window-header {
-    background-color: #1f0505;
-    padding: 12px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #ff0000;
-    color: #fff;
-    font-family: "Press Start 2P", system-ui;
-    font-size: 10px;
-}
-
-.window-title-area {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.window-dot {
-    width: 10px;
-    height: 10px;
-    background-color: #ff0000;
-    border-radius: 50%;
-    box-shadow: 0 0 8px #ff0000;
-}
-
-.window-close {
-    background: #ff00003f;
-    border: 2px solid #ff0000;
-    color: white;
-    font-family: "Press Start 2P", system-ui;
-    font-size: 10px;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 6px;
-    transition: background 0.2s;
 }
 
 .window-close:hover {

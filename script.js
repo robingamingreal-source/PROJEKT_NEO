@@ -15,3 +15,11 @@ function openTruenas1() {
 function openTruenas2() {
     window.location.href = 'http://192.168.178.77';
 }
+
+function openTerminal(){
+    window.location.href = "http://localhost:8080"
+}
+
+function openCode(){
+    window.location.href = "http://localhost:8090"
+}
