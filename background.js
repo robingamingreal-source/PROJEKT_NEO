@@ -1,5 +1,5 @@
 const starsContainer = document.getElementById('stars-container');
-    const starCount = 50;
+    const starCount = 10;
 
     for (let i = 0; i < starCount; i++) {
       const star = document.createElement('div');
