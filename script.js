@@ -13,3 +13,12 @@ function openNetdataWindow(){
         'width=1000,height=700,menubar=true,toolbar=no,location=no,status=no,resizable=yes'
     )
 }
+async function triggerUpdate() {
+    if (confirm("Kiosk neustarten und Updates ziehen?")) {
+        try {
+            await fetch('http://127.0.0.1:8089', { method: 'POST' });
+        } catch (e) {
+            console.log("Server beendet sich...");
+        }
+    }
+}
