@@ -30,6 +30,7 @@ function openWindow(id) {
             if (offlineCount === 0) {
                 widget.className = "status-card normal";
                 text.innerText = "ALLE SYSTEME ONLINE";
+                stopAlarm();
             } else if (offlineCount === 1) {
                 widget.className = "status-card warning";
                 text.innerText = "WARNUNG: 1 SYSTEM OFFLINE";
@@ -74,3 +75,9 @@ function stopAlarm() {
 }
     setInterval(checkSystems, 1000);
     checkSystems();
+document.addEventListener('click', () => {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}, { once: true });
